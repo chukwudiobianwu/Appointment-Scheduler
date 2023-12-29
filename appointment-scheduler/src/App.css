@@ -1,0 +1,75 @@
+/* src/App.css */
+
+.app-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: radial-gradient(rgb(113, 0, 128) 2%, white 100%);
+}
+
+.sapp-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  
+  
+}
+#sig{
+  text-align: center;
+}
+.sign-in-container {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  width: 300px;
+  background-color: rgb(133, 127, 139);
+}
+
+.signup-container {
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 20px;
+  width: 300px;
+  background-color: rgb(133, 127, 139);
+}
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  margin-bottom: 8px;
+}
+
+input {
+  margin-bottom: 16px;
+  padding: 8px;
+}
+
+select{
+  margin-bottom: 16px;
+  padding: 8px;
+}
+button {
+  background-color: #4caf50;
+  color: white;
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+}
+
+.signup {
+  background-color: #afad4c;
+  color: white;
+  width: 300px;
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+

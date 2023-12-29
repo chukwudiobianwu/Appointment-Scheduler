@@ -1,0 +1,2 @@
+In order to run this ap on Vscode you need to enter your powershell and enter Set-ExecutionPolicy RemoteSigned and you can use Restricted to set it back to being restricted
+Creating the app npx create-react-app appointment-scheduler was used
