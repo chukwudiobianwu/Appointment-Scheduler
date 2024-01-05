@@ -1,39 +1,57 @@
 // src/SignUp.js
-
+import axios from 'axios'
 import React, { useState } from 'react';
+import { BrowserRouter, Routes, Route, Link, useNavigate} from 'react-router-dom';
+// src/Signup.js
+
+
 
 
 function SignUp() {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
-  const [newUsername, setNewUsername] = useState('');
-  const [newPassword, setNewPassword] = useState('');
+  const [Username, setNewUsername] = useState('');
+  const [Password, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState(''); // Added state for confirm password
   const [birthday, setBirthday] = useState('');
   const [gender, setGender] = useState(''); // Add gender state
   const [status, setStatus] = useState(''); // Add status state
-  /*
+  const nav = useNavigate()
 
-  const handleSignUp = async () => {
-    try {
-      const response = await axios.post('http://localhost:3001/api/signup', {
-        fullName,
-        email,
-        newUsername: username, // Assuming you've updated this in the state
-        newPassword: password, // Assuming you've updated this in the state
-        birthday,
-        gender,
-        Status,
-      });
-  
-      console.log('Sign up successful:', response.data);
-  
-      // You can handle success actions here (e.g., redirect to another page)
-    } catch (error) {
-      console.error('Sign up failed:', error.response.data);
-      // Handle error, show a message, etc.
+  const handleSignUp = (e) => {
+    if(Password != confirmPassword){
+      alert("Passwords do not match")
+      return
     }
+    e.preventDefault()
+    axios.post('http://localhost:3001/Signup', {fullName,email,Username,Password,confirmPassword,birthday,gender,status})
+    .then(result => {console.log(result) 
+      nav('/')
+      alert("Sign Up Successful")
+    })
+    .catch(err => console.log(err))
   };
+  /*
+  const user = {
+    fullName: fullName,
+    email: email,
+    newUsername: newUsername,
+    newPassword: newPassword,
+    confirmPassword: confirmPassword,
+    birthday: birthday,
+    gender: gender,
+    status: status,
+  };
+
+  const handleSignUp = () => {
+  UserInfo.create(user, (error, user) => {
+    if (error) {
+      console.error(error);
+    } else {
+      console.log('User profile created:', user);
+    }
+    mongoose.connection.close(); // Close the connection after inserting data
+  });
   */
   const handleCheckState = () => {
     console.log('Current fullName state:', gender);
@@ -67,7 +85,7 @@ function SignUp() {
             type="text"
             id="newUsername"
             placeholder="Enter your username"
-            value={newUsername}
+            value={Username}
             onChange={(e) => setNewUsername(e.target.value)}
           />
 
@@ -76,7 +94,7 @@ function SignUp() {
             type="password"
             id="newPassword"
             placeholder="Enter Password"
-            value={newPassword}
+            value={Password}
             onChange={(e) => setNewPassword(e.target.value)}
           />
 
@@ -129,10 +147,10 @@ function SignUp() {
                   </select>
 
 
-          <button type="button" >
+          <button type="button" onClick={handleSignUp}>
             Sign Up
           </button>
-      <button type="button" onClick={handleCheckState}>
+      <button type="button" onClick={handleSignUp}>
         Check State
       </button>
         </form>
@@ -140,5 +158,6 @@ function SignUp() {
     </div>
   );
 }
+
 
 export default SignUp;
