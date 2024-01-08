@@ -5,25 +5,32 @@ import './App.css';
 import SignUp from './Signup.js';
 import Home from './Home.js';
 import { BrowserRouter, Routes, Route, Link, useNavigate} from 'react-router-dom';
+import Profile from "./Profile/Profile.js";
 
-function Login() {
+const Login = ({ setUserId }) => {
   
   const [Username, setUsername] = useState('');
   const [Password, setPassword] = useState();
   const nav = useNavigate()
-
   const handleSubmit = (e) => {
-    e.preventDefault()
-    axios.post('http://localhost:3001/signin', {Username ,Password})
-    .then(result => {console.log(result)
-      if (result.data == "success"){
-        nav('/home')
-      }if(result.data == "the Password is incorrect"){
-        alert("the Password is incorrect")
-      }
-    })
-    .catch(err => console.log(err))
-  }
+    
+    e.preventDefault();
+    axios.post('http://localhost:3001/signin', { Username, Password })
+      .then(result => {
+        console.log(result);
+        if (result.data.status === "success") {
+          setUserId(result.data.userId)
+          localStorage.setItem('userId', result.data.userId);
+          // Pass the user ID to your navigation function or store it in a state
+          nav('/home');
+        } else if (result.data.status === "incorrectPassword") {
+          alert("The password is incorrect");
+        } else if (result.data.status === "userNotExist") {
+          alert("User does not exist");
+        }
+      })
+      .catch(err => console.log(err));
+  };
 /*
   // Use the useNavigate hook to get the navigate function
   const navigate = useNavigate();
@@ -35,6 +42,7 @@ function Login() {
   */
 
   return (
+    <div className="sapp-container">
     <div className="sign-in-container">
       <h1 id='sam'>Appointment Scheduler</h1>
       <form>
@@ -74,17 +82,20 @@ function Login() {
         </nav>
       </form>
     </div>
+    </div>
   );
 }
 
 function App() {
+  const [userId, setUserId] = useState(null);
   return (
     <div className="app-container">
         
         <Routes>
-        <Route path="/" element={<Login />}></Route>
+        <Route path="/" element={<Login setUserId={setUserId}/>}></Route>
         <Route path="/SignUp" element={<SignUp />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/home" element={<Home userId={userId} />} />
+        <Route path="/profile" element={<Profile userIdd={userId}/>} />
         </Routes>
       
     </div>

@@ -1,20 +1,11 @@
 /* src/App.css */
-
-.app-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background: radial-gradient(rgb(113, 0, 128) 2%, white 100%);
-}
-
 .sapp-container {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  
-  
+  background: radial-gradient(rgb(113, 0, 128) 2%, white 100%);
+     
 }
 #sig , #sam{
   text-align: center;
@@ -24,6 +15,7 @@
   border-radius: 10px;
   padding: 20px;
   width: 300px;
+  align-items: center;
   background-color: rgb(133, 127, 139);
 }
 

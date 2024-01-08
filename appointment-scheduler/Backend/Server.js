@@ -36,6 +36,7 @@ const UserInfo = mongoose.model('UserInfo', {
   birthday: String,
   gender: String,
   status: String,
+  Appointments: String,
 });
 
 app.post('/SignUp', async (req, res) => {
@@ -45,21 +46,50 @@ app.post('/SignUp', async (req, res) => {
 })
 
 app.post('/signin', async (req, res) => {
-  const {Username, Password} = req.body
-  UserInfo.findOne({Username: Username})
-  .then(user => {
-    if(user){
-      if (user.Password === Password){
-        res.json("success")
-        alert("yeah")
-      }else{
-        res.json("the password is incorrect")
+  const { Username, Password } = req.body;
+  UserInfo.findOne({ Username: Username })
+    .then(user => {
+      if (user) {
+        if (user.Password === Password) {
+          res.json({ status: "success", userId: user._id }); // Include user ID in the response
+        } else {
+          res.json({ status: "incorrectPassword" });
+        }
+      } else {
+        res.json({ status: "userNotExist" });
       }
-    }else{
-      res.json("User Does not Exist")
-    }
-  })
-})
+    })
+    .catch(err => res.json({ status: "error", error: err.message }));
+});
+
+app.get('/getUserInfo/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  console.log("evevev",userId)
+  UserInfo.findById(userId)
+    .then(user => {
+      if (user) {
+        res.json(user);
+      } else {
+        res.json({ status: "userNotExist" });
+      }
+    })
+    .catch(err => res.json({ status: "error", error: err.message }));
+});
+
+app.get('/user/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  console.log("evevev",userId)
+  UserInfo.findById(userId)
+    .then(user => {
+      if (user) {
+        res.json(user);
+      } else {
+        res.json({ status: "userNotExist" });
+      }
+    })
+    .catch(err => res.json({ status: "error", error: err.message }));
+});
+
 /*
 app.use(bodyParser.json());
 

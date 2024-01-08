@@ -150,9 +150,11 @@ function SignUp() {
           <button type="button" onClick={handleSignUp}>
             Sign Up
           </button>
+
       <button type="button" onClick={handleSignUp}>
         Check State
       </button>
+      
         </form>
       </div>
     </div>
