@@ -11,8 +11,7 @@
   
   .profile-info {
     display: flex;
-    
-    margin: 0 auto;
+    margin: 10 auto;
     justify-content: space-between;
     margin-top: 100px;
     

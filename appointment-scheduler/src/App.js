@@ -6,6 +6,7 @@ import SignUp from './Signup.js';
 import Home from './Home.js';
 import { BrowserRouter, Routes, Route, Link, useNavigate} from 'react-router-dom';
 import Profile from "./Profile/Profile.js";
+import Settings from "./Settings/Settings.js";
 
 const Login = ({ setUserId }) => {
   
@@ -21,6 +22,7 @@ const Login = ({ setUserId }) => {
         if (result.data.status === "success") {
           setUserId(result.data.userId)
           localStorage.setItem('userId', result.data.userId);
+          localStorage.setItem('status', result.data.Status)
           // Pass the user ID to your navigation function or store it in a state
           nav('/home');
         } else if (result.data.status === "incorrectPassword") {
@@ -88,6 +90,8 @@ const Login = ({ setUserId }) => {
 
 function App() {
   const [userId, setUserId] = useState(null);
+  const Status = localStorage.getItem('status')
+  console.log('frbrb',Status)
   return (
     <div className="app-container">
         
@@ -95,7 +99,8 @@ function App() {
         <Route path="/" element={<Login setUserId={setUserId}/>}></Route>
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/home" element={<Home userId={userId} />} />
-        <Route path="/profile" element={<Profile userIdd={userId}/>} />
+        <Route path="/profile" element={<Profile userIdd={userId} Status={Status}/>} />
+        <Route path="/Settings" element={<Settings/>} />
         </Routes>
       
     </div>
