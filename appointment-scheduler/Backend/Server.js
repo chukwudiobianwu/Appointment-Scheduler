@@ -235,7 +235,7 @@ app.get('/available-appointments', async (req, res) => {
 // Book an appointment for a customer
 app.post('/book-appointment/:userId', async (req, res) => {
   try {
-    const { start, end } = req.body;
+    const { start, end ,title} = req.body;
     const userId = req.params.userId;
 
     // Step 1: Find the user
@@ -249,18 +249,32 @@ app.post('/book-appointment/:userId', async (req, res) => {
     const employee = await UserInfo.findOne({
       status: "Employee",
       "AvailableAppointments.start": start,
-      "AvailableAppointments.end": end
+      "AvailableAppointments.end": end,  
     });
 
     if (employee) {
       // Step 3: Remove the appointment slot from the employee's AvailableAppointments
-      employee.AvailableAppointments = employee.AvailableAppointments.filter(
-        appointment => appointment.start !== start || appointment.end !== end
+      const indexToRemove = employee.AvailableAppointments.findIndex(
+        (appointment) =>
+          appointment.start.getTime() === new Date(start).getTime() &&
+          appointment.end.getTime() === new Date(end).getTime()
       );
+      if (indexToRemove !== -1) {
+        // Remove the appointment from the AvailableAppointments array
+        employee.AvailableAppointments.splice(indexToRemove, 1);
+        await employee.save();
+
+        res.status(200).json({
+          message: 'Appointment removed successfully',
+          updatedAvailableAppointments: user.AvailableAppointments,
+        });
+      }else{
+        res.status(404).send("Not Available")
+      }
 
       // Step 4: Add the appointment to both the user's and the employee's UpcomingAppointments
-      user.UpcomingAppointments.push({ start, end, title: 'Booked' });
-      employee.UpcomingAppointments.push({ start, end, title: 'Booked' });
+      user.UpcomingAppointments.push({ start, end, title: title });
+      employee.UpcomingAppointments.push({ start, end, title: title });
 
       // Step 5: Save the changes to both user and employee documents
       await user.save();

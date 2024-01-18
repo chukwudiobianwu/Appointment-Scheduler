@@ -250,27 +250,52 @@ else {
 
   
     const MyCalendar = ({ events }) => {
+      const [availableAppointments, setAvailableAppointments] = useState([]);
+      useEffect(() => {
+        axios.get(`http://localhost:3001/upcoming-appointments/${userId}`)
+          .then(response => {
+            setAvailableAppointments(response.data);
+            console.log("wfwfr",response.data)
+          })
+          .catch(error => {
+            console.error('Error fetching available appointments:', error);
+          });
+      }, [userId]);
+
+      const convertEvent = (event) => ({
+        start: new Date(event.start),
+        end: new Date(event.end),
+        title: event.title,
+        // Remove the _id property or convert it to a string if needed
+      });
+
+
+      const convertedEvents = availableAppointments.map(convertEvent);
+
       const localizer = momentLocalizer(moment);
       return (
         <div>
           <h2>My Calendar</h2>
           <Calendar
             localizer={localizer}
-            events={events}  
+            events={convertedEvents}  
             startAccessor="start"
             endAccessor="end"
             style={{ height: 500 }}
-            view = "week"
+            
           />
         </div>
       );
     };
     
+
     const AvailableAppointments  = () => {
       const localizer = momentLocalizer(moment);
       const [startDate, setStartDate] = useState(new Date());
       const [endDate, setEndDate] = useState(new Date());
       const [title, setTitle] = useState('');
+
+
       const handleSelect = ({ start, end }) => {
         setStartDate(start); 
         setEndDate(end);
@@ -292,12 +317,31 @@ else {
               console.error('Error fetching available appointments:', error);
             });
         }, [userId]);
+
+
       const convertEvent = (event) => ({
         start: new Date(event.start),
         end: new Date(event.end),
         title: event.title,
         // Remove the _id property or convert it to a string if needed
       });
+
+      const handleBookAppointment = () => {
+        // Make a request to the server to book the selected appointment
+        axios.post(`http://localhost:3001/book-appointment/${userId}`, {
+          start: startDate,
+          end: endDate,
+          title: title
+        })
+        .then(response => {
+          console.log(response.data);
+          // Handle success or show a notification to the user
+        })
+        .catch(error => {
+          console.error('Error booking appointment:', error);
+          // Handle error or show a notification to the user
+        });
+      };
       const convertedEvents = availableAppointments.map(convertEvent);
       return (
         <div>
@@ -316,13 +360,13 @@ else {
           <div>
             <p>Title:</p>
             <input type="text" value={title} onChange={handleTitleChange} />
-            <input type='submit' name='Set Appointment Availability' />
+            <input type='submit' name='Set Appointment Availability' onClick={handleBookAppointment}/>
           </div>
           <div>
             <p>Selected Date and Time:</p>
             <p>Start: {startDate.toString()}</p>
             <p>End: {endDate.toString()}</p>
-            <p>Title: {title}</p>
+            <p>Reason For Appointment: {title}</p>
           </div>
         </div>
       );
